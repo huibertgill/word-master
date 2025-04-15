@@ -14,7 +14,7 @@ Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine
 ## Mitwirken
 1. Klonen Sie das Repository: `git clone https://github.com/username/word-master.git`
 2. Wechseln Sie in das Projektverzeichnis: `cd word-master`
-3. Erstellen Sie eine virtuelle Umgebung und installieren Sie die erforderlichen Abhängigkeiten: `python -m venv backend/venv && source backend/venv/bin/activate && pip install flask`
+3. Erstellen Sie eine virtuelle Umgebung und installieren Sie die erforderlichen Abhängigkeiten: `python -m venv backend/venv && source backend/venv/bin/activate && pip install -r requirements.txt`
 4. Starten Sie die Anwendung: `python backend/app.py`
 
 ## Nächste Schritte

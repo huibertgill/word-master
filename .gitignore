@@ -17,3 +17,6 @@ build/
 
 # Ignore environment files
 .env
+
+# Ignore virtual environments
+backend/venv/
