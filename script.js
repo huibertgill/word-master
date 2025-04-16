@@ -34,9 +34,11 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     if (data.results.length > 0) {
-      const imageUrl = data.results[0].urls.regular;
+      const imageUrl = `${data.results[0].urls.raw}&w=640&h=480&fit=crop&q=100`;
       const img = document.createElement('img');
       img.src = imageUrl;
+      img.width = 640;
+      img.height = 480;
       wordDisplay.innerHTML = '';
       wordDisplay.appendChild(img);
     } else {
