@@ -20,3 +20,4 @@ build/
 
 # Ignore virtual environments
 backend/venv/
+backend/result-example.json
