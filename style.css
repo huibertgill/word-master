@@ -1,19 +1,105 @@
+/* Modernes, helles Farbschema */
+:root {
+  --primary-color: #00698f;
+  --background: #f7f9fa;
+  --text-color: #333;
+  --button-bg: #e3f2fd;
+  --button-hover: #d1ecf8;
+}
+
+/* Grundlegende Styling */
 body {
- font-family: Arial, sans-serif;
- text-align: center;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 h1 {
- color: #00698f;
-h1 {
-  color: #00698f;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
 }
 
-#word-display {
-  margin-bottom: 100px;
+/* Flexbox-Layout für Eingabefeld und Buttons */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 #user-input {
-  font-size: 2em;
+  flex: 1 1 auto;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: var(--button-bg);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+#word-display {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+#result {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Responsives Design */
+@media (max-width: 600px) {
+  .input-group {
+    flex-direction: column;
+  }
+  #user-input, button {
+    width: 100%;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .container {
+    max-width: 900px;
+  }
+}
+
+/* Barrierefreiheit */
+button:focus, #user-input:focus {
+  outline: 3px solid #00698f;
+  outline-offset: 2px;
 }
