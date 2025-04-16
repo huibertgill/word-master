@@ -120,7 +120,23 @@ button:focus, #user-input:focus {
  max-height: 400px;
  overflow-y: auto;
  text-align: left;
-}
+ }
+ 
+ .message {
+ margin-bottom: 1rem;
+ padding: 0.5rem;
+ border-radius: 4px;
+ }
+ 
+ .message.user {
+ background-color: #e3f2fd;
+ align-self: flex-end;
+ }
+ 
+ .message.ai {
+ background-color: #f0f0f0;
+ align-self: flex-start;
+ }
 
 #chat-input {
  width: calc(100% - 100px);
