@@ -11,6 +11,7 @@ Word-Master ist eine webbasierte Anwendung, die mit Flask entwickelt wurde, um e
 - Die Anwendung verwendet eine statische Liste von englischen Wörtern, die in `words.txt` gespeichert ist.
 - Jeder Eintrag in `words.txt` entspricht einem Wort, das geübt wird.
 - Die Anwendung integriert Unsplash für die Bildersuche, um das Lernen visuell zu unterstützen.
+ - Der Benutzer gibt den gesuchten Begriff ein, eine KI gibt Feedback und unterstützt bei der Wortfindung und Schreibweise.
 
 ## Aktueller Status
 Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine Flask-Anwendung läuft. Die Webanwendung ist erreichbar unter http://127.0.0.1:5000. Die Anwendung benötigt Python 3.9 oder höher.
@@ -34,6 +35,15 @@ Unsplash wird für die Bilder benötigt.
 Ein kostenloser Account unter https://unsplash.com/oauth/applications/ ist ausreichend.
 Die API-Informationen werden dann in die .env-Datei eingetragen.
 Eine Beispiel-.env-Datei ist im Projekt vorhanden.
+
+## KI
+Es wird ein KI / AI benötigt für die Antworten, ich empfehle llama-4-maverick-17b-128e-instruct zB über GROQ, kostet nur 0,10€ / million Tokens
+Alles in .env hinterlegen
+Der Prompt ist in backend/ai_prompt hinterlegt, und muss zZ in einer langen Zeile Text hinterlegt sein.
+
+## Neue Funktionen
+* Verbesserung des Chatverlaufs durch Anpassung der CSS-Klassen
+* Auslagerung des Prompts für die AI in eine eigene Datei (`backend/ai_prompt.txt`)
 
 ## Nächste Schritte
 - Implementierung der Eingabe- und Überprüfungsfunktion
