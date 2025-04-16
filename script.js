@@ -4,29 +4,40 @@ document.addEventListener("DOMContentLoaded", function () {
  const chatDisplay = document.getElementById('chat-display');
  const wordDisplay = document.getElementById('word-display');
 
- let words = ["Wednesday", "Pneumonia", "Queue", "Island", "Receipt", "Yacht", "Scissors", "Pharmacy", "Neighbor", "Restaurant", "February", "Knee", "Knife", "Ocean", "Banana", "Bicycle", "Giraffe", "Chocolate", "Breakfast", "Weight"];
- let currentWord = words[Math.floor(Math.random() * words.length)];
+ let currentWord = null;
  let unsplashData = null;
- const url = `/unsplash?query=${currentWord}`;
- fetch(url)
- .then(response => response.json())
- .then(data => {
- if (data.results && data.results.length >0) {
- const randomIndex = Math.floor(Math.random() * data.results.length);
- unsplashData = data.results[randomIndex];
- const imageUrl = `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100`;
- const img = document.createElement('img');
- img.src = imageUrl;
- wordDisplay.innerHTML = '';
- wordDisplay.appendChild(img);
- } else {
- wordDisplay.innerText = currentWord;
- }
- })
- .catch(error => {
- console.error('Error fetching image from Unsplash:', error);
- wordDisplay.innerText = currentWord;
- });
+
+ // Hole das aktuelle Wort vom Backend
+ fetch('/random_word')
+   .then(response => response.json())
+   .then(data => {
+     currentWord = data.word;
+
+     const url = `/unsplash?query=${currentWord}`;
+     fetch(url)
+       .then(response => response.json())
+       .then(data => {
+         if (data.results && data.results.length > 0) {
+           const randomIndex = Math.floor(Math.random() * data.results.length);
+           unsplashData = data.results[randomIndex];
+           const imageUrl = `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100`;
+           const img = document.createElement('img');
+           img.src = imageUrl;
+           wordDisplay.innerHTML = '';
+           wordDisplay.appendChild(img);
+         } else {
+           wordDisplay.innerText = currentWord;
+         }
+       })
+       .catch(error => {
+         console.error('Error fetching image from Unsplash:', error);
+         wordDisplay.innerText = currentWord;
+       });
+   })
+   .catch(error => {
+     console.error('Fehler beim Laden des Wortes:', error);
+     wordDisplay.innerText = 'Fehler beim Laden des Wortes';
+   });
 
  sendButton.addEventListener('click', async function () {
   const message = chatInput.value.trim();

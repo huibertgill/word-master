@@ -30,6 +30,31 @@ def unsplash_proxy():
     else:
         return jsonify({'error': 'Failed to fetch data from Unsplash'}), response.status_code
 
+# Route für ein zufälliges Wort
+import random
+
+@app.route('/random_word', methods=['GET'])
+def random_word():
+    words = []
+    words_file_path = os.path.join(os.path.dirname(__file__), '..', 'words.txt')
+    try:
+        if os.path.exists(words_file_path):
+            with open(words_file_path, 'r', encoding='utf-8') as f:
+                words = [line.strip() for line in f if line.strip()]
+    except Exception:
+        words = []
+
+    # Fallback-Liste, falls Datei fehlt oder leer ist
+    if not words:
+        words = [
+            "Wednesday", "Pneumonia", "Queue", "Island", "Receipt", "Yacht",
+            "Scissors", "Pharmacy", "Neighbor", "Restaurant", "February",
+            "Knee", "Knife", "Ocean", "Banana", "Bicycle", "Giraffe",
+            "Chocolate", "Breakfast", "Weight"
+        ]
+    word = random.choice(words)
+    return jsonify({"word": word})
+
 # Neue Route für den AI-Chat
 @app.route('/ai_chat', methods=['POST'])
 def ai_chat():
