@@ -42,11 +42,14 @@ def ai_chat():
     openai_url = os.getenv('OPENAI_URL')
 
     # Erstellung des Prompts für die KI
-    prompt = f"Du bist ein English Tutor. Das Spiel heißt: Schreibe das Wort anhand eines Bildes. Das gesuchte Wort lautet: {image_info['word']}. Der Teilnehmer hat nicht das richtige Wort eingegeben, sondern: {user_input}. Weitere Hinweise zum Bild sind: - Bild Titel von Unsplash: {image_info['title']} - Description von Unsplash: {image_info['description']} - Alt_Description von Unsplash: {image_info['alt_description']}. Gebe einen Hinweis, ohne das Wort direkt zu verraten. Sprich Englisch, wechele ggf. auf Deutsch, wenn du meinst, der Teilnehmer hat Probleme."
+    with open('./backend/ai_prompt.txt', 'r') as file:
+     prompt_template = file.read()
+     prompt = prompt_template.format(image_info=image_info, user_input=user_input)
 
     # Anfrage an die OpenAI-API
     headers = {'Authorization': f'Bearer {openai_api_key}', 'Content-Type': 'application/json'}
-    payload = {'model': 'gpt-3.5-turbo', 'messages': [{'role': 'user', 'content': prompt}]}
+    openai_model = os.getenv('OPENAI_MODELL')
+    payload = {'model': openai_model, 'messages': [{'role': 'user', 'content': prompt}]}
     response = requests.post(openai_url, headers=headers, json=payload)
 
     if response.status_code == 200:

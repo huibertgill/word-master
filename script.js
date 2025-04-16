@@ -1,101 +1,84 @@
-let words = [
-    "Wednesday",
-    "Pneumonia",
-    "Queue",
-    "Island",
-    "Receipt",
-    "Yacht",
-    "Scissors",
-    "Pharmacy",
-    "Neighbor",
-    "Restaurant",
-    "February",
-    "Knee",
-    "Knife",
-    "Ocean",
-    "Banana",
-    "Bicycle",
-    "Giraffe",
-    "Chocolate",
-    "Breakfast",
-    "Weight"
-];
-
 document.addEventListener("DOMContentLoaded", function () {
-    const wordDisplay = document.getElementById('word-display');
-    const userInput = document.getElementById('user-input');
-    const checkButton = document.getElementById('check-button');
-    const resultDiv = document.getElementById('result');
+ const chatInput = document.getElementById('chat-input');
+ const sendButton = document.getElementById('send-button');
+ const chatDisplay = document.getElementById('chat-display');
+ const wordDisplay = document.getElementById('word-display');
 
-    let currentWord = words[Math.floor(Math.random() * words.length)];
-    let unsplashData = null; // Unsplash-Daten speichern
-    const accessKey = '';
-    const url = `/unsplash?query=${currentWord}`;
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.results.length > 0) {
-                const randomIndex = Math.floor(Math.random() * data.results.length);
-                unsplashData = data.results[randomIndex]; // Zufälliges Bild speichern
-                const imageUrl = `${data.results[randomIndex].urls.raw}&w=640&h=480&fit=max&q=100`;
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                wordDisplay.innerHTML = '';
-                wordDisplay.appendChild(img);
-            } else {
-                wordDisplay.innerText = currentWord;
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching image from Unsplash:', error);
-            wordDisplay.innerText = currentWord;
-        });
+ let words = ["Wednesday", "Pneumonia", "Queue", "Island", "Receipt", "Yacht", "Scissors", "Pharmacy", "Neighbor", "Restaurant", "February", "Knee", "Knife", "Ocean", "Banana", "Bicycle", "Giraffe", "Chocolate", "Breakfast", "Weight"];
+ let currentWord = words[Math.floor(Math.random() * words.length)];
+ let unsplashData = null;
+ const url = `/unsplash?query=${currentWord}`;
+ fetch(url)
+ .then(response => response.json())
+ .then(data => {
+ if (data.results && data.results.length >0) {
+ const randomIndex = Math.floor(Math.random() * data.results.length);
+ unsplashData = data.results[randomIndex];
+ const imageUrl = `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100`;
+ const img = document.createElement('img');
+ img.src = imageUrl;
+ wordDisplay.innerHTML = '';
+ wordDisplay.appendChild(img);
+ } else {
+ wordDisplay.innerText = currentWord;
+ }
+ })
+ .catch(error => {
+ console.error('Error fetching image from Unsplash:', error);
+ wordDisplay.innerText = currentWord;
+ });
 
-    userInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            checkInput();
-        }
-    });
+ sendButton.addEventListener('click', async function () {
+  const message = chatInput.value.trim();
+  const imageData = {
+  word: currentWord,
+  title: unsplashData ? unsplashData.alt_description : '',
+  description: unsplashData ? unsplashData.description : '',
+  alt_description: unsplashData ? unsplashData.alt_description : ''
+  };
+ 
+  if (message) {
+  displayMessage('user', message);
+ 
+  try {
+  const response = await fetch('/ai_chat', {
+  method: 'POST',
+  headers: {
+  'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+  user_input: message,
+  image_info: imageData
+  })
+  });
+ 
+  const data = await response.json();
+  if (data.choices && data.choices.length >0) {
+  const aiResponse = data.choices[0].message.content;
+  displayMessage('ai', aiResponse);
+  } else {
+  displayMessage('ai', 'Entschuldigung, ich konnte nicht antworten.');
+  }
+  } catch (error) {
+  console.error('Fehler beim Senden der Anfrage:', error);
+  displayMessage('ai', 'Ein Fehler ist aufgetreten.');
+  }
+  
+  chatInput.value = '';
+  }
+ });
 
-    checkButton.addEventListener('click', checkInput);
+ function displayMessage(sender, message) {
+ const messageElement = document.createElement('div');
+ messageElement.classList.add('message', sender);
+ messageElement.innerText = message;
+ chatDisplay.appendChild(messageElement);
+ chatDisplay.scrollTop = chatDisplay.scrollHeight;
+ }
 
-    const newQuestionButton = document.getElementById('new-question-button');
-    newQuestionButton.addEventListener('click', function () {
-        location.reload();
-    });
-
-    function checkInput() {
-        if (userInput.value.toLowerCase() === currentWord.toLowerCase()) {
-            resultDiv.innerText = 'Richtig!';
-            const infoDiv = document.getElementById('unsplash-info');
-            if (infoDiv) infoDiv.remove();
-        } else {
-            resultDiv.innerText = `Falsch. Das richtige Wort war ${currentWord}.`;
-            const img = wordDisplay.querySelector('img');
-            if (img && unsplashData) {
-                const oldInfo = document.getElementById('unsplash-info');
-                if (oldInfo) oldInfo.remove();
-                const infoDiv = document.createElement('div');
-                infoDiv.id = 'unsplash-info';
-                infoDiv.style.marginTop = '12px';
-                let html = '';
-                if (unsplashData.alternative_slugs && unsplashData.alternative_slugs.en) {
-                    let formattedSlug = unsplashData.alternative_slugs.en.replace(/-/g, ' ');
-                    let slugWords = formattedSlug.split(' ');
-                    slugWords.pop();
-                    formattedSlug = slugWords.join(' ');
-                    html += `<div><strong>Alternative Slug (en):</strong> ${formattedSlug}</div>`;
-                }
-                if (unsplashData.description) {
-                    html += `<div><strong>Beschreibung:</strong> ${unsplashData.description}</div>`;
-                }
-                if (unsplashData.alt_description) {
-                    html += `<div><strong>Alt-Beschreibung:</strong> ${unsplashData.alt_description}</div>`;
-                }
-                infoDiv.innerHTML = html;
-                img.after(infoDiv);
-            }
-            
-        }
-    }
+ chatInput.addEventListener('keydown', function (event) {
+ if (event.key === 'Enter') {
+ sendButton.click();
+ }
+ });
 });
