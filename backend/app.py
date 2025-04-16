@@ -47,10 +47,10 @@ def random_word():
     # Fallback-Liste, falls Datei fehlt oder leer ist
     if not words:
         words = [
-            "Wednesday", "Pneumonia", "Queue", "Island", "Receipt", "Yacht",
-            "Scissors", "Pharmacy", "Neighbor", "Restaurant", "February",
+            "Island", "Yacht",
+            "Scissors", "Pharmacy", "Neighbor", "Restaurant",
             "Knee", "Knife", "Ocean", "Banana", "Bicycle", "Giraffe",
-            "Chocolate", "Breakfast", "Weight"
+            "Chocolate", "Breakfast", "Horse", "Dog"
         ]
     word = random.choice(words)
     return jsonify({"word": word})

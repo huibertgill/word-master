@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (message) {
    displayMessage('user', message);
   
-   if (message === currentWord) {
+   if (message.toLowerCase() === currentWord.toLowerCase()) {
    displayMessage('ai', 'Glückwunsch, das ist korrekt!');
    } else {
    try {
