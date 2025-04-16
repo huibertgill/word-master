@@ -37,11 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.results.length > 0) {
                 const randomIndex = Math.floor(Math.random() * data.results.length);
                 unsplashData = data.results[randomIndex]; // Zufälliges Bild speichern
-                const imageUrl = `${data.results[randomIndex].urls.raw}&w=640&h=480&fit=crop&q=100`;
+                const imageUrl = `${data.results[randomIndex].urls.raw}&w=640&h=480&fit=max&q=100`;
                 const img = document.createElement('img');
                 img.src = imageUrl;
-                img.width = 640;
-                img.height = 480;
                 wordDisplay.innerHTML = '';
                 wordDisplay.appendChild(img);
             } else {
@@ -69,22 +67,17 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkInput() {
         if (userInput.value.toLowerCase() === currentWord.toLowerCase()) {
             resultDiv.innerText = 'Richtig!';
-            // Zusätzliche Infos entfernen, falls vorhanden
             const infoDiv = document.getElementById('unsplash-info');
             if (infoDiv) infoDiv.remove();
         } else {
             resultDiv.innerText = `Falsch. Das richtige Wort war ${currentWord}.`;
-            // Prüfen, ob ein Bild angezeigt wird und Unsplash-Daten vorhanden sind
             const img = wordDisplay.querySelector('img');
             if (img && unsplashData) {
-                // Vorherige Info entfernen, falls vorhanden
                 const oldInfo = document.getElementById('unsplash-info');
                 if (oldInfo) oldInfo.remove();
-                // Neues Info-Div erstellen
                 const infoDiv = document.createElement('div');
                 infoDiv.id = 'unsplash-info';
                 infoDiv.style.marginTop = '12px';
-                // Felder ausgeben
                 let html = '';
                 if (unsplashData.alternative_slugs && unsplashData.alternative_slugs.en) {
                     let formattedSlug = unsplashData.alternative_slugs.en.replace(/-/g, ' ');
@@ -100,9 +93,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     html += `<div><strong>Alt-Beschreibung:</strong> ${unsplashData.alt_description}</div>`;
                 }
                 infoDiv.innerHTML = html;
-                // Unter das Bild einfügen
                 img.after(infoDiv);
             }
+            
         }
     }
 });
