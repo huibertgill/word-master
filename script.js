@@ -28,7 +28,25 @@ document.addEventListener("DOMContentLoaded", function() {
  const resultDiv = document.getElementById('result');
 
  let currentWord = words[Math.floor(Math.random() * words.length)];
- wordDisplay.innerText = currentWord;
+const accessKey = '';
+const url = `https://api.unsplash.com/search/photos?client_id=${accessKey}&query=${currentWord}`;
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    if (data.results.length > 0) {
+      const imageUrl = data.results[0].urls.regular;
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      wordDisplay.innerHTML = '';
+      wordDisplay.appendChild(img);
+    } else {
+      wordDisplay.innerText = currentWord;
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching image from Unsplash:', error);
+    wordDisplay.innerText = currentWord;
+  });
 
  checkButton.addEventListener('click', function() {
  if (userInput.value.toLowerCase() === currentWord.toLowerCase()) {
