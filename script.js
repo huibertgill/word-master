@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
  let currentWord = words[Math.floor(Math.random() * words.length)];
 const accessKey = '';
-const url = `https://api.unsplash.com/search/photos?client_id=${accessKey}&query=${currentWord}`;
+const url = `/unsplash?query=${currentWord}`;
 fetch(url)
   .then(response => response.json())
   .then(data => {
