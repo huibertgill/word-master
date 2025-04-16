@@ -1,5 +1,10 @@
 # Word-Master
 
+> ⚠️ **Warning**  
+> This project is a testbed for me, using VS Code, RooCode and AI-assisted coding.
+> Don't expect anything handcrafted or interesting.
+
+
 ## Einführung
 Word-Master ist eine webbasierte Anwendung, die mit Flask entwickelt wurde, um englische Hauptwörter zu üben. Die Anwendung ist auf Deutsch und hilft Benutzern, ihre Englischkenntnisse zu verbessern.
 
