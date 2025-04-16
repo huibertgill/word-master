@@ -38,33 +38,37 @@ document.addEventListener("DOMContentLoaded", function () {
   };
  
   if (message) {
-  displayMessage('user', message);
- 
-  try {
-  const response = await fetch('/ai_chat', {
-  method: 'POST',
-  headers: {
-  'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-  user_input: message,
-  image_info: imageData
-  })
-  });
- 
-  const data = await response.json();
-  if (data.choices && data.choices.length >0) {
-  const aiResponse = data.choices[0].message.content;
-  displayMessage('ai', aiResponse);
-  } else {
-  displayMessage('ai', 'Entschuldigung, ich konnte nicht antworten.');
-  }
-  } catch (error) {
-  console.error('Fehler beim Senden der Anfrage:', error);
-  displayMessage('ai', 'Ein Fehler ist aufgetreten.');
-  }
+   displayMessage('user', message);
   
-  chatInput.value = '';
+   if (message === currentWord) {
+   displayMessage('ai', 'Glückwunsch, das ist korrekt!');
+   } else {
+   try {
+   const response = await fetch('/ai_chat', {
+   method: 'POST',
+   headers: {
+   'Content-Type': 'application/json'
+   },
+   body: JSON.stringify({
+   user_input: message,
+   image_info: imageData
+   })
+   });
+  
+   const data = await response.json();
+   if (data.choices && data.choices.length >0) {
+   const aiResponse = data.choices[0].message.content;
+   displayMessage('ai', aiResponse);
+   } else {
+   displayMessage('ai', 'Entschuldigung, ich konnte nicht antworten.');
+   }
+   } catch (error) {
+   console.error('Fehler beim Senden der Anfrage:', error);
+   displayMessage('ai', 'Ein Fehler ist aufgetreten.');
+   }
+   }
+  
+   chatInput.value = '';
   }
  });
 
