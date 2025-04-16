@@ -7,11 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
  let currentWord = null;
  let unsplashData = null;
 
+ let failCount = 0; // Zähler für Fehlversuche
+
  // Hole das aktuelle Wort vom Backend
  fetch('/random_word')
    .then(response => response.json())
    .then(data => {
      currentWord = data.word;
+     failCount = 0; // Zähler zurücksetzen bei neuem Spiel
 
      const url = `/unsplash?query=${currentWord}`;
      fetch(url)
@@ -52,31 +55,38 @@ document.addEventListener("DOMContentLoaded", function () {
    displayMessage('user', message);
   
    if (message.toLowerCase() === currentWord.toLowerCase()) {
-   displayMessage('ai', 'Glückwunsch, das ist korrekt!');
+    displayMessage('ai', 'Glückwunsch, das ist korrekt!');
+    failCount = 0; // Zähler zurücksetzen bei korrekter Lösung
    } else {
-   try {
-   const response = await fetch('/ai_chat', {
-   method: 'POST',
-   headers: {
-   'Content-Type': 'application/json'
-   },
-   body: JSON.stringify({
-   user_input: message,
-   image_info: imageData
-   })
-   });
-  
-   const data = await response.json();
-   if (data.choices && data.choices.length >0) {
-   const aiResponse = data.choices[0].message.content;
-   displayMessage('ai', aiResponse);
-   } else {
-   displayMessage('ai', 'Entschuldigung, ich konnte nicht antworten.');
-   }
-   } catch (error) {
-   console.error('Fehler beim Senden der Anfrage:', error);
-   displayMessage('ai', 'Ein Fehler ist aufgetreten.');
-   }
+    failCount++;
+    if (failCount >= 4) {
+      displayMessage('ai', 'Das richtige Wort war: ' + currentWord);
+      failCount = 0;
+    } else {
+      try {
+        const response = await fetch('/ai_chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_input: message,
+            image_info: imageData
+          })
+        });
+
+        const data = await response.json();
+        if (data.choices && data.choices.length > 0) {
+          const aiResponse = data.choices[0].message.content;
+          displayMessage('ai', aiResponse);
+        } else {
+          displayMessage('ai', 'Entschuldigung, ich konnte nicht antworten.');
+        }
+      } catch (error) {
+        console.error('Fehler beim Senden der Anfrage:', error);
+        displayMessage('ai', 'Ein Fehler ist aufgetreten.');
+      }
+    }
    }
   
    chatInput.value = '';
