@@ -35,8 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.results.length > 0) {
-                unsplashData = data.results[0]; // Speichern für spätere Anzeige
-                const imageUrl = `${data.results[0].urls.raw}&w=640&h=480&fit=crop&q=100`;
+                const randomIndex = Math.floor(Math.random() * data.results.length);
+                unsplashData = data.results[randomIndex]; // Zufälliges Bild speichern
+                const imageUrl = `${data.results[randomIndex].urls.raw}&w=640&h=480&fit=crop&q=100`;
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.width = 640;
@@ -86,7 +87,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Felder ausgeben
                 let html = '';
                 if (unsplashData.alternative_slugs && unsplashData.alternative_slugs.en) {
-                    html += `<div><strong>Alternative Slug (en):</strong> ${unsplashData.alternative_slugs.en}</div>`;
+                    let formattedSlug = unsplashData.alternative_slugs.en.replace(/-/g, ' ');
+                    let slugWords = formattedSlug.split(' ');
+                    slugWords.pop();
+                    formattedSlug = slugWords.join(' ');
+                    html += `<div><strong>Alternative Slug (en):</strong> ${formattedSlug}</div>`;
                 }
                 if (unsplashData.description) {
                     html += `<div><strong>Beschreibung:</strong> ${unsplashData.description}</div>`;
