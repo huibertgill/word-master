@@ -168,10 +168,24 @@ button:focus, #user-input:focus {
  background-color: var(--button-hover);
 }
 
+/* Overlay für Countdown nach korrekter Lösung */
+#countdown-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 3em;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
 /* Anpassung für kleinere Bildschirme */
 @media (max-width: 600px) {
- #chat-input, #send-button {
- width: 100%;
- margin-bottom: 0.5rem;
- }
+  #chat-input, #send-button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  }
 }

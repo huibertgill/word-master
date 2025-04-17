@@ -89,6 +89,26 @@ document.addEventListener("DOMContentLoaded", function () {
    if (message.toLowerCase() === currentWord.toLowerCase()) {
     displayMessage('ai', 'Glückwunsch, das ist korrekt!');
     failCount = 0; // Zähler zurücksetzen bei korrekter Lösung
+
+    // Countdown-Overlay einblenden und Seite nach 5 Sekunden neu laden
+    const countdownOverlay = document.getElementById('countdown-overlay');
+    let countdown = 5;
+    if (countdownOverlay) {
+      countdownOverlay.style.display = 'flex';
+      countdownOverlay.textContent = `Glückwunsch das war richtig! \n\n\nNeue Augabe in ${countdown} Sekunden...`;
+      const interval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          countdownOverlay.textContent = `Neustart in ${countdown} Sekunden...`;
+        } else {
+          clearInterval(interval);
+          countdownOverlay.textContent = 'Seite wird neu geladen...';
+          setTimeout(() => {
+            location.reload();
+          }, 500);
+        }
+      }, 1000);
+    }
    } else {
     failCount++;
     if (failCount >= 4) {
