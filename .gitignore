@@ -17,7 +17,7 @@ build/
 
 # Ignore environment files
 .env
+server/.env
 
 # Ignore virtual environments
-backend/venv/
-backend/result-example.json
+venv/

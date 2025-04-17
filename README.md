@@ -22,11 +22,11 @@ Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine
 2. Wechseln Sie in das Projektverzeichnis: `cd word-master`
 3. Erstellen Sie eine virtuelle Umgebung und installieren Sie die erforderlichen Abhängigkeiten:
    ```bash
-   python3.9 -m venv backend/venv
-   source backend/venv/bin/activate
+   python3 -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
-4. Starten Sie die Anwendung: `python backend/app.py`
+4. Starten Sie die Anwendung: `cd server && python3 app.py`
 
 ## Anforderungen
 Die Anwendung benötigt die folgenden Python-Pakete, die in `requirements.txt` aufgeführt sind

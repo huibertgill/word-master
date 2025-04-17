@@ -10,11 +10,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('../', 'index.html')
+    return send_from_directory('static/', 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('../', path)
+    return send_from_directory('static/', path)
 
 @app.route('/unsplash')
 def unsplash_proxy():
@@ -36,7 +36,7 @@ import random
 @app.route('/random_word', methods=['GET'])
 def random_word():
     words = []
-    words_file_path = os.path.join(os.path.dirname(__file__), '..', 'words.txt')
+    words_file_path = os.path.join(os.path.dirname(__file__), 'words.txt')
     try:
         if os.path.exists(words_file_path):
             with open(words_file_path, 'r', encoding='utf-8') as f:
@@ -67,7 +67,7 @@ def ai_chat():
     openai_url = os.getenv('OPENAI_URL')
 
     # Erstellung des Prompts für die KI
-    with open('./backend/ai_prompt.txt', 'r') as file:
+    with open('./ai_prompt.txt', 'r') as file:
      prompt_template = file.read()
      prompt = prompt_template.format(image_info=image_info, user_input=user_input)
 
