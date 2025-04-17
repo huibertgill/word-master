@@ -114,8 +114,8 @@ def describe_image_v2():
             {
                 'role': 'user',
                 'content': [
-                    {'type': 'input_text', 'text': 'Please provide a concise English description of the image.'},
-                    {'type': 'input_image', 'image_url': image_url}
+                    {'type': 'text', 'text': 'Please provide a concise English description of the image.'},
+                    {'type': 'image_url', 'image_url': {'url': image_url}}
                 ]
             }
         ]
