@@ -20,32 +20,27 @@ document.addEventListener("DOMContentLoaded", function () {
      fetch(url)
        .then(response => response.json())
        .then(data => {
-         if (data.results && data.results.length > 0) {
-           const randomIndex = Math.floor(Math.random() * data.results.length);
-           unsplashData = data.results[randomIndex];
-           const imageUrl = `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100`;
-           const img = document.createElement('img');
-           img.src = imageUrl;
-           wordDisplay.innerHTML = '';
-           wordDisplay.appendChild(img);
-          // Fetch AI-generated image description by sending the actual image URL
-          fetch('/describe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image_url: imageUrl })
-          })
-          .then(res => res.json())
-          .then(descData => {
-            const descText = descData.description || '';
-            const p = document.createElement('p');
-            p.classList.add('image-description');
-            p.innerText = descText;
-            wordDisplay.appendChild(p);
-          })
-          .catch(err => console.error('Error fetching image description:', err));
-         } else {
-           wordDisplay.innerText = currentWord;
-         }
+         unsplashData = data;
+         const imageUrl = `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100`;
+         const img = document.createElement('img');
+         img.src = imageUrl;
+         wordDisplay.innerHTML = '';
+         wordDisplay.appendChild(img);
+         // Fetch AI-generated image description by sending the actual image URL
+         fetch('/describe', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ image_url: imageUrl })
+         })
+         .then(res => res.json())
+         .then(descData => {
+           const descText = descData.description || '';
+           const p = document.createElement('p');
+           p.classList.add('image-description');
+           p.innerText = descText;
+           wordDisplay.appendChild(p);
+         })
+         .catch(err => console.error('Error fetching image description:', err));
        })
        .catch(error => {
          console.error('Error fetching image from Unsplash:', error);

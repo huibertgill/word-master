@@ -26,7 +26,13 @@ def unsplash_proxy():
     url = f'https://api.unsplash.com/search/photos?client_id={access_key}&query={query}'
     response = requests.get(url)
     if response.status_code == 200:
-        return jsonify(response.json())
+        data = response.json()
+        results = data.get('results', [])
+        if not results:
+            return jsonify({'error': 'No images found for the given query'}), 404
+        import random
+        random_image = random.choice(results)
+        return jsonify(random_image)
     else:
         return jsonify({'error': 'Failed to fetch data from Unsplash'}), response.status_code
 
