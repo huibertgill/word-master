@@ -60,6 +60,28 @@ document.addEventListener("DOMContentLoaded", function () {
   description: unsplashData ? unsplashData.description : '',
   alt_description: unsplashData ? unsplashData.alt_description : ''
   };
+
+  // KI-Bildbeschreibung abrufen und alt_description ggf. überschreiben
+  if (unsplashData && unsplashData.urls && unsplashData.urls.raw) {
+    try {
+      const response = await fetch('/describe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image_url: `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100` })
+      });
+      if (response.ok) {
+        const result = await response.json();
+        if (result && result.description) {
+          imageData.alt_description = result.description;
+        }
+      }
+    } catch (error) {
+      // Fehlerbehandlung: Fallback auf Unsplash-alt_description
+      console.warn('KI-Bildbeschreibung konnte nicht geladen werden, Fallback auf Unsplash:', error);
+    }
+  }
  
   if (message) {
    displayMessage('user', message);
