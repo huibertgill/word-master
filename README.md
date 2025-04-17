@@ -9,12 +9,13 @@ Word-Master ist eine webbasierte Anwendung, die mit Flask entwickelt wurde, um e
 
 ## Funktionalität
 - Die Anwendung verwendet eine statische Liste von englischen Wörtern, die in `words.txt` gespeichert ist.
-- Jeder Eintrag in `words.txt` entspricht einem Wort, das geübt wird.
+- Jeder Eintrag in `words.txt` (aktuell 280 Wörter, kann natürlich erweitert werde) entspricht einem Wort, das geübt wird.
 - Die Anwendung integriert Unsplash für die Bildersuche, um das Lernen visuell zu unterstützen.
  - Der Benutzer gibt den gesuchten Begriff ein, eine KI gibt Feedback und unterstützt bei der Wortfindung und Schreibweise.
+ - Nach 4 Versuche wird das gesuchte Wort gezeigt
 
 ## Aktueller Status
-Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine Flask-Anwendung läuft. Die Webanwendung ist erreichbar unter http://127.0.0.1:5000. Die Anwendung benötigt Python 3.9 oder höher.
+Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine Flask-Anwendung läuft. Die Webanwendung ist erreichbar unter http://127.0.0.1:5000. Die Anwendung benötigt Python 3 oder höher.
 
 ## Mitwirken
 1. Klonen Sie das Repository: `git clone https://github.com/username/word-master.git`
@@ -41,13 +42,9 @@ Es wird ein KI / AI benötigt für die Antworten, ich empfehle llama-4-maverick-
 Alles in .env hinterlegen
 Der Prompt ist in backend/ai_prompt hinterlegt, und muss zZ in einer langen Zeile Text hinterlegt sein.
 
-## Neue Funktionen
-* Verbesserung des Chatverlaufs durch Anpassung der CSS-Klassen
-* Auslagerung des Prompts für die AI in eine eigene Datei (`backend/ai_prompt.txt`)
-
-## Nächste Schritte
-- Implementierung der Eingabe- und Überprüfungsfunktion
-- Verbesserung der KI-Funktionalität zur Bildersuche
 
 ## Nutzung
-Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um die Anwendung zu verwenden. Die Bildersuche-Funktion kann genutzt werden, um passende Bilder für die Wörter zu finden.
+Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um die Anwendung zu verwenden. 
+Es wird ein Bild gezeigt, und ein Englisches Wort gesucht.
+Gebe das gesuchte Wort ein, wenn es nicht richtig ist, wird man von der KI Unterstützt.
+Lade die Seite neu, für eine neue Aufgabe.
