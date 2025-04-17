@@ -28,6 +28,21 @@ document.addEventListener("DOMContentLoaded", function () {
            img.src = imageUrl;
            wordDisplay.innerHTML = '';
            wordDisplay.appendChild(img);
+          // Fetch AI-generated image description by sending the actual image URL
+          fetch('/describe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_url: imageUrl })
+          })
+          .then(res => res.json())
+          .then(descData => {
+            const descText = descData.description || '';
+            const p = document.createElement('p');
+            p.classList.add('image-description');
+            p.innerText = descText;
+            wordDisplay.appendChild(p);
+          })
+          .catch(err => console.error('Error fetching image description:', err));
          } else {
            wordDisplay.innerText = currentWord;
          }

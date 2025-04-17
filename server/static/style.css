@@ -6,6 +6,13 @@
  --button-bg: #e3f2fd;
  --button-hover: #d1ecf8;
 }
+/* Styling for AI-generated image description */
+.image-description {
+  font-style: italic;
+  color: #555;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
 
 /* Grundlegende Styling */
 body {
