@@ -9,6 +9,13 @@ Word-Master ist eine webbasierte Anwendung, die mit Flask entwickelt wurde, um e
 
 ## Quickstart
 Um die Anwendung schnell zu starten, nutzen Sie das Skript `start.sh`. Das Skript erstellt automatisch eine virtuelle Umgebung, installiert alle Abhängigkeiten und startet Gunicorn.
+Kopiere die dot.env aus dem config-examples Verzeichnis 
+```bash
+cp config-examples/dot.env .env
+```
+Und gebe die entsprechenden API_Keys und URLs an.
+
+Starten per script, zeiht die VENV, und alle Requirements.
 
 ```bash
 ./start.sh
@@ -26,7 +33,7 @@ Anschließend ist die Anwendung unter http://127.0.0.1:5000 erreichbar.
 ## Aktueller Status
 Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine Flask-Anwendung läuft. Die Webanwendung ist erreichbar unter http://127.0.0.1:5000. Die Anwendung benötigt Python 3 oder höher.
 
-## Mitwirken
+## Mitwirken  
 1. Klonen Sie das Repository: `git clone https://github.com/username/word-master.git`
 2. Wechseln Sie in das Projektverzeichnis: `cd word-master`
 3. Erstellen Sie eine virtuelle Umgebung und installieren Sie die erforderlichen Abhängigkeiten:
@@ -57,6 +64,8 @@ Es wird ein KI / AI benötigt für die Antworten, ich empfehle llama-4-maverick-
 Alles in .env hinterlegen
 Der Prompt ist in backend/ai_prompt hinterlegt, und muss zZ in einer langen Zeile Text hinterlegt sein.
 
+# Config-exmaples
+In diesen Verzeichnis liegen Beispiel Dateien um zB unter Ubuntu die App als System Service zu integrieren, und einen VHost unter lighhtpd ein zurichten.
 
 ## Nutzung
 Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um die Anwendung zu verwenden. 
