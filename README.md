@@ -7,6 +7,15 @@
 ## Einführung
 Word-Master ist eine webbasierte Anwendung, die mit Flask entwickelt wurde, um englische Hauptwörter zu üben. Die Anwendung ist auf Deutsch und hilft Benutzern, ihre Englischkenntnisse zu verbessern, indem sie eine interaktive Umgebung zum Lernen bietet.
 
+## Quickstart
+Um die Anwendung schnell zu starten, nutzen Sie das Skript `start.sh`. Das Skript erstellt automatisch eine virtuelle Umgebung, installiert alle Abhängigkeiten und startet Gunicorn.
+
+```bash
+./start.sh
+```
+
+Anschließend ist die Anwendung unter http://127.0.0.1:8000 erreichbar.
+
 ## Funktionalität
 - Die Anwendung verwendet eine statische Liste von englischen Wörtern, die in `words.txt` gespeichert ist.
 - Jeder Eintrag in `words.txt` (aktuell 280 Wörter, kann natürlich erweitert werde) entspricht einem Wort, das geübt wird.
@@ -27,6 +36,12 @@ Das Projekt ist nun in einer funktionierenden Version verfügbar, die über eine
    pip install -r requirements.txt
    ```
 4. Starten Sie die Anwendung: `cd server && python3 app.py`
+
+**Alternativ kann die Anwendung mit Gunicorn gestartet werden (empfohlen für Produktion):**
+
+```bash
+gunicorn server.app:app
+```
 
 ## Anforderungen
 Die Anwendung benötigt die folgenden Python-Pakete, die in `requirements.txt` aufgeführt sind

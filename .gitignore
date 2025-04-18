@@ -18,6 +18,7 @@ build/
 # Ignore environment files
 .env
 server/.env
+server/__pycache__/
 
 # Ignore virtual environments
 venv/
