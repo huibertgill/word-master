@@ -3,9 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
  const sendButton = document.getElementById('send-button');
  const chatDisplay = document.getElementById('chat-display');
  const wordDisplay = document.getElementById('word-display');
+ const spinner = document.getElementById('spinner');
 
  let currentWord = null;
  let unsplashData = null;
+ let imageDescription = null; // Zwischenspeicher für die Bildbeschreibung
 
  let failCount = 0; // Zähler für Fehlversuche
 
@@ -35,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
          .then(res => res.json())
          .then(descData => {
            const descText = descData.description || '';
+           imageDescription = descText; // Bildbeschreibung zwischenspeichern
            const p = document.createElement('p');
            p.classList.add('image-description');
            p.innerText = descText;
@@ -62,25 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // KI-Bildbeschreibung abrufen und alt_description ggf. überschreiben
-  if (unsplashData && unsplashData.urls && unsplashData.urls.raw) {
-    try {
-      const response = await fetch('/describe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ image_url: `${unsplashData.urls.raw}&w=640&h=480&fit=max&q=100` })
-      });
-      if (response.ok) {
-        const result = await response.json();
-        if (result && result.description) {
-          imageData.alt_description = result.description;
-        }
-      }
-    } catch (error) {
-      // Fehlerbehandlung: Fallback auf Unsplash-alt_description
-      console.warn('KI-Bildbeschreibung konnte nicht geladen werden, Fallback auf Unsplash:', error);
-    }
+  // KEIN weiterer Request an /describe, sondern zwischengespeicherte Beschreibung verwenden
+  if (imageDescription) {
+    imageData.alt_description = imageDescription;
   }
  
   if (message) {
@@ -116,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
       failCount = 0;
     } else {
       try {
+        spinner.style.display = 'block';
         const response = await fetch('/ai_chat', {
           method: 'POST',
           headers: {
@@ -137,6 +125,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (error) {
         console.error('Fehler beim Senden der Anfrage:', error);
         displayMessage('ai', 'Ein Fehler ist aufgetreten.');
+      } finally {
+        spinner.style.display = 'none';
       }
     }
    }
@@ -158,4 +148,14 @@ document.addEventListener("DOMContentLoaded", function () {
  sendButton.click();
  }
  });
+  // Event-Listener für den "Hilfe"-Button, um die Bildbeschreibung anzuzeigen
+  const helpButton = document.getElementById('help-button');
+  if (helpButton) {
+    helpButton.addEventListener('click', function () {
+      const descElem = wordDisplay.querySelector('.image-description');
+      if (descElem) {
+        descElem.style.display = 'block';
+      }
+    });
+  }
 });
