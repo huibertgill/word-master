@@ -14,7 +14,7 @@ Um die Anwendung schnell zu starten, nutzen Sie das Skript `start.sh`. Das Skrip
 ./start.sh
 ```
 
-Anschließend ist die Anwendung unter http://127.0.0.1:8000 erreichbar.
+Anschließend ist die Anwendung unter http://127.0.0.1:5000 erreichbar.
 
 ## Funktionalität
 - Die Anwendung verwendet eine statische Liste von englischen Wörtern, die in `words.txt` gespeichert ist.
