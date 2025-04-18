@@ -1,0 +1,12 @@
+[Unit]
+Description=Flask App Service
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/word-master
+ExecStart=/opt/word-master/start.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
