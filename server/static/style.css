@@ -6,6 +6,7 @@
  --button-bg: #e3f2fd;
  --button-hover: #d1ecf8;
 }
+
 /* Styling for AI-generated image description */
 .image-description {
   display: none;
@@ -15,32 +16,34 @@
   font-size: 1rem;
 }
 
-/* Grundlegende Styling */
+/* Grundlegende Styling (Mobile-First) */
 body {
  font-family: 'Arial', sans-serif;
  margin: 0;
- padding: 0;
+ padding: 1rem; /* Padding für mobile Ansicht */
  background-color: var(--background);
  color: var(--text-color);
  line-height: 1.6;
  text-align: center;
+ box-sizing: border-box; /* Padding in die Breite einbeziehen */
 }
 
 .container {
- max-width: 800px;
- margin: 2rem auto;
- padding: 0 1rem;
+ max-width: 100%; /* Volle Breite auf kleinen Bildschirmen */
+ margin: 1rem auto; /* Weniger Margin auf kleinen Bildschirmen */
+ padding: 0; /* Kein zusätzliches Padding im Container für mobile */
 }
 
 h1 {
  color: var(--primary-color);
- margin-bottom: 2rem;
+ margin-bottom: 1rem; /* Weniger Margin auf kleinen Bildschirmen */
+ font-size: 1.8rem; /* Angepasste Schriftgröße für mobile */
 }
 
-/* Flexbox-Layout für Eingabefeld und Buttons */
+/* Flexbox-Layout für Eingabefeld und Buttons (Mobile-First) */
 .input-group {
  display: flex;
- flex-wrap: wrap;
+ flex-direction: column; /* Standardmäßig Spaltenlayout für mobile */
  gap: 0.5rem;
  justify-content: center;
  margin-bottom: 1rem;
@@ -49,9 +52,11 @@ h1 {
 #user-input {
  flex: 1 1 auto;
  padding: 0.5rem;
- font-size: 1.2rem;
+ font-size: 1rem; /* Angepasste Schriftgröße für mobile */
  border: 1px solid #ccc;
  border-radius: 4px;
+ width: 100%; /* Volle Breite für mobile */
+ box-sizing: border-box;
 }
 
 button {
@@ -62,6 +67,8 @@ button {
  border-radius: 4px;
  cursor: pointer;
  transition: background-color 0.3s;
+ width: 100%; /* Volle Breite für mobile */
+ box-sizing: border-box;
 }
 
 button:hover {
@@ -69,8 +76,8 @@ button:hover {
 }
 
 #word-display {
- margin-bottom: 2rem;
- font-size: 1.5rem;
+ margin-bottom: 1rem; /* Weniger Margin auf kleinen Bildschirmen */
+ font-size: 1.2rem; /* Angepasste Schriftgröße für mobile */
 }
 
 #result {
@@ -79,31 +86,7 @@ button:hover {
  background-color: #fff;
  border: 1px solid #ddd;
  border-radius: 4px;
-}
-
-/* Responsives Design */
-@media (max-width: 600px) {
- .input-group {
- flex-direction: column;
- }
- #user-input, button {
- width: 100%;
- }
- h1 {
- font-size: 1.8rem;
- }
-}
-
-@media (min-width: 601px) and (max-width: 1024px) {
- .container {
- padding: 0 2rem;
- }
-}
-
-@media (min-width: 1025px) {
- .container {
- max-width: 900px;
- }
+ text-align: left; /* Text linksbündig im Ergebnisbereich */
 }
 
 /* Barrierefreiheit */
@@ -112,11 +95,11 @@ button:focus, #user-input:focus {
  outline-offset: 2px;
 }
 
-/* Chatbereich Styling */
+/* Chatbereich Styling (Mobile-First) */
 #chat-container {
- max-width: 800px;
- margin: 2rem auto;
- padding: 0 1rem;
+ max-width: 100%; /* Volle Breite auf kleinen Bildschirmen */
+ margin: 1rem auto; /* Weniger Margin auf kleinen Bildschirmen */
+ padding: 0; /* Kein zusätzliches Padding im Container für mobile */
 }
 
 #chat-display {
@@ -125,41 +108,47 @@ button:focus, #user-input:focus {
  border: 1px solid #ddd;
  border-radius: 4px;
  margin-bottom: 1rem;
- max-height: 400px;
+ max-height: 300px; /* Angepasste Höhe für mobile */
  overflow-y: auto;
  text-align: left;
- }
- 
- #buttons {
-margin:10px;
+}
 
- }
- .message {
- margin-bottom: 1rem;
+#buttons {
+ margin: 0; /* Kein zusätzlicher Margin für mobile */
+ display: flex; /* Flexbox für Buttons im Chat */
+ flex-direction: column; /* Standardmäßig Spaltenlayout für mobile */
+ gap: 0.5rem;
+}
+
+.message {
+ margin-bottom: 0.5rem; /* Weniger Margin zwischen Nachrichten */
  padding: 0.5rem;
  border-radius: 4px;
- }
- 
- .message.user {
+ word-break: break-word; /* Lange Wörter umbrechen */
+}
+
+.message.user {
  background-color: #e3f2fd;
  align-self: flex-end;
- }
- 
- .message.ai {
+}
+
+.message.ai {
  background-color: #f0f0f0;
  align-self: flex-start;
- }
+}
 
 #chat-input {
- width: calc(100% - 100px);
+ width: 100%; /* Volle Breite für mobile */
  padding: 0.5rem;
  font-size: 1rem;
  border: 1px solid #ccc;
  border-radius: 4px;
+ box-sizing: border-box;
+ margin-bottom: 0.5rem; /* Abstand zum Button */
 }
 
 #send-button {
- width: 100px;
+ width: 100%; /* Volle Breite für mobile */
  padding: 0.5rem;
  font-size: 1rem;
  background-color: var(--button-bg);
@@ -167,6 +156,7 @@ margin:10px;
  border-radius: 4px;
  cursor: pointer;
  transition: background-color 0.3s;
+ box-sizing: border-box;
 }
 
 #send-button:hover {
@@ -185,14 +175,6 @@ margin:10px;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-}
-
-/* Anpassung für kleinere Bildschirme */
-@media (max-width: 600px) {
-  #chat-input, #send-button {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  }
 }
 
 /* Spinner-Design und Animation */
@@ -216,4 +198,72 @@ margin:10px;
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Media Queries für größere Bildschirme */
+@media (min-width: 600px) {
+  body {
+    padding: 0; /* Kein zusätzliches Padding auf größeren Bildschirmen */
+  }
+
+  .container {
+    max-width: 800px; /* Max-Breite für größere Bildschirme */
+    margin: 2rem auto; /* Mehr Margin auf größeren Bildschirmen */
+    padding: 0 1rem; /* Padding für größere Bildschirme */
+  }
+
+  h1 {
+    margin-bottom: 2rem; /* Mehr Margin auf größeren Bildschirmen */
+    font-size: 2.5rem; /* Größere Schriftgröße für PC */
+  }
+
+  .input-group {
+    flex-direction: row; /* Zeilenlayout für größere Bildschirme */
+    gap: 0.5rem;
+  }
+
+  #user-input {
+    flex: 1; /* Nimmt verfügbaren Platz ein */
+    font-size: 1.2rem; /* Größere Schriftgröße für PC */
+    width: auto; /* Breite automatisch anpassen */
+  }
+
+  button {
+    width: auto; /* Breite automatisch anpassen */
+  }
+
+  #word-display {
+    margin-bottom: 2rem; /* Mehr Margin auf größeren Bildschirmen */
+    font-size: 1.5rem; /* Größere Schriftgröße für PC */
+  }
+
+  #chat-container {
+    max-width: 800px; /* Max-Breite für größere Bildschirme */
+    margin: 2rem auto; /* Mehr Margin auf größeren Bildschirmen */
+    padding: 0 1rem; /* Padding für größere Bildschirme */
+  }
+
+  #chat-display {
+    max-height: 400px; /* Größere Höhe für PC */
+  }
+
+  #buttons {
+    flex-direction: row; /* Zeilenlayout für größere Bildschirme */
+    margin: 10px 0 0 0; /* Angepasster Margin */
+  }
+
+  #chat-input {
+    width: calc(100% - 220px); /* Angepasste Breite für PC (Input + 2 Buttons) */
+    margin-bottom: 0; /* Kein Margin unten */
+  }
+
+  #send-button {
+    width: 100px; /* Feste Breite für PC */
+  }
+}
+
+@media (min-width: 1025px) {
+  .container, #chat-container {
+    max-width: 900px; /* Noch größere Max-Breite für sehr große Bildschirme */
+  }
 }
