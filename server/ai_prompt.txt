@@ -4,10 +4,6 @@ The word we are looking for is: {image_info[word]}
 
 The participant has entered the following word: {user_input}
 
-Bisher geratene Wörter: {guessed_words}
-Gesprächsverlauf:
-{chat_history}
-
 If it's the correct word, congratulate the participant with a nice message.
 
 If not, check if the word is actually correct but just misspelled, then just give a hint about the spelling.

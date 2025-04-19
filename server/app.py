@@ -71,6 +71,8 @@ def ai_chat():
     guessed_words = data.get('guessed_words', [])
     fail_count = data.get('fail_count', 0)
 
+    print(f"Received data: chat_history={chat_history}, guessed_words={guessed_words}, fail_count={fail_count}")
+
     # Laden des OpenAI-API-Schlüssels aus der .env-Datei
     openai_api_key = os.getenv('OPENAI_API_KEY')
     openai_url = os.getenv('OPENAI_URL')
@@ -85,29 +87,46 @@ def ai_chat():
         with open('./ai_prompt.txt', 'r', encoding='utf-8') as file:
             prompt_template = file.read()
 
-    # Formatierung des Gesprächsverlaufs für den Prompt
-    formatted_chat_history = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
-
     # Formatierung der geratenen Wörter für den Prompt
     formatted_guessed_words = ", ".join([f"WORT_{i+1}: {word}" for i, word in enumerate(guessed_words)])
 
-    # Erstellung des Prompts für die KI
-    prompt = prompt_template.format(
-        image_info=image_info,
-        user_input=user_input,
-        chat_history=formatted_chat_history,
-        guessed_words=formatted_guessed_words
-    )
+    # Erstellung des Inhalts für die aktuelle Benutzernachricht
+    current_user_message_content = f"""
+Bildinformationen: {image_info}
+Bisher geratene Wörter: {formatted_guessed_words}
+Benutzereingabe: {user_input}
+
+{prompt_template}
+"""
 
     # Anfrage an die OpenAI-API
     headers = {'Authorization': f'Bearer {openai_api_key}', 'Content-Type': 'application/json'}
     openai_model = os.getenv('OPENAI_MODELL')
+
     # Senden des Gesprächsverlaufs als separate Nachrichten im Payload
-    messages = [{'role': msg['role'], 'content': msg['content']} for msg in chat_history]
-    messages.append({'role': 'user', 'content': prompt}) # Füge den aktuellen Prompt als letzte Benutzernachricht hinzu
+    messages = [{'role': ('assistant' if msg['role'] == 'ai' else msg['role']), 'content': msg['content']} for msg in chat_history]
+
+    # Füge die aktuelle Benutzernachricht mit den kombinierten Informationen hinzu
+    # Finde die letzte Nachricht im Gesprächsverlauf (sollte die aktuelle Benutzereingabe sein)
+    if messages and messages[-1]['role'] == 'user':
+        # Kombiniere die aktuelle Benutzereingabe mit den Kontextinformationen
+        messages[-1]['content'] = f"""{current_user_message_content}
+
+Benutzereingabe: {messages[-1]['content']}
+"""
+    else:
+        # Falls die letzte Nachricht aus irgendeinem Grund keine Benutzer Nachricht ist, füge eine neue hinzu
+        # Dies sollte nicht passieren, wenn das Frontend den Gesprächsverlauf korrekt sendet
+        messages.append({'role': 'user', 'content': current_user_message_content})
+
 
     payload = {'model': openai_model, 'messages': messages}
+    print(f"Sending payload to OpenAI: {payload}")
+
     response = requests.post(openai_url, headers=headers, json=payload)
+
+    print(f"OpenAI API response status code: {response.status_code}")
+    print(f"OpenAI API response body: {response.text}")
 
     if response.status_code == 200:
         return jsonify(response.json())
