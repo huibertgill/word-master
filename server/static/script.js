@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
  let imageDescription = null; // Zwischenspeicher für die Bildbeschreibung
 
  let failCount = 0; // Zähler für Fehlversuche
+ let chatHistory = []; // Array zur Speicherung des Gesprächsverlaufs
+ let guessedWords = []; // Array zur Speicherung der geratenen Wörter
 
  // Hole das aktuelle Wort vom Backend
  fetch('/random_word')
@@ -97,23 +99,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 1000);
     }
    } else {
-    failCount++;
-    if (failCount >= 4) {
-      displayMessage('ai', 'Das richtige Wort war: ' + currentWord);
-      failCount = 0;
-    } else {
-      try {
-        spinner.style.display = 'block';
-        const response = await fetch('/ai_chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            user_input: message,
-            image_info: imageData
-          })
-        });
+   failCount++;
+   // Geratenes Wort zur Liste hinzufügen, wenn es falsch ist und nicht das letzte Wort ist
+   if (failCount < 4) {
+     guessedWords.push(message);
+   }
+
+   if (failCount >= 4) {
+     displayMessage('ai', 'Das richtige Wort war: ' + currentWord);
+     failCount = 0;
+     guessedWords = []; // Geratene Wörter zurücksetzen
+     chatHistory = []; // Gesprächsverlauf zurücksetzen
+   } else {
+     try {
+       spinner.style.display = 'block';
+       const response = await fetch('/ai_chat', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({
+           user_input: message,
+           image_info: imageData,
+           chat_history: chatHistory, // Gesprächsverlauf hinzufügen
+           guessed_words: guessedWords, // Geratene Wörter hinzufügen
+           fail_count: failCount // Fehlerzähler hinzufügen
+         })
+       });
 
         const data = await response.json();
         if (data.choices && data.choices.length > 0) {
@@ -141,6 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
  messageElement.innerText = message;
  chatDisplay.appendChild(messageElement);
  chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+ // Nachricht zum Gesprächsverlauf hinzufügen
+ chatHistory.push({ role: sender, content: message });
  }
 
  chatInput.addEventListener('keydown', function (event) {

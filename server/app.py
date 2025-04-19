@@ -67,20 +67,46 @@ def ai_chat():
     data = request.json
     user_input = data.get('user_input')
     image_info = data.get('image_info')
+    chat_history = data.get('chat_history', [])
+    guessed_words = data.get('guessed_words', [])
+    fail_count = data.get('fail_count', 0)
 
     # Laden des OpenAI-API-Schlüssels aus der .env-Datei
     openai_api_key = os.getenv('OPENAI_API_KEY')
     openai_url = os.getenv('OPENAI_URL')
 
+    # Prompt-Auswahl basierend auf Fehlerzähler
+    prompt_file = f'./ai_prompt_{fail_count}.txt'
+    try:
+        with open(prompt_file, 'r', encoding='utf-8') as file:
+            prompt_template = file.read()
+    except FileNotFoundError:
+        # Fallback to a default prompt if the specific one is not found
+        with open('./ai_prompt.txt', 'r', encoding='utf-8') as file:
+            prompt_template = file.read()
+
+    # Formatierung des Gesprächsverlaufs für den Prompt
+    formatted_chat_history = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
+
+    # Formatierung der geratenen Wörter für den Prompt
+    formatted_guessed_words = ", ".join([f"WORT_{i+1}: {word}" for i, word in enumerate(guessed_words)])
+
     # Erstellung des Prompts für die KI
-    with open('./ai_prompt.txt', 'r') as file:
-     prompt_template = file.read()
-     prompt = prompt_template.format(image_info=image_info, user_input=user_input)
+    prompt = prompt_template.format(
+        image_info=image_info,
+        user_input=user_input,
+        chat_history=formatted_chat_history,
+        guessed_words=formatted_guessed_words
+    )
 
     # Anfrage an die OpenAI-API
     headers = {'Authorization': f'Bearer {openai_api_key}', 'Content-Type': 'application/json'}
     openai_model = os.getenv('OPENAI_MODELL')
-    payload = {'model': openai_model, 'messages': [{'role': 'user', 'content': prompt}]}
+    # Senden des Gesprächsverlaufs als separate Nachrichten im Payload
+    messages = [{'role': msg['role'], 'content': msg['content']} for msg in chat_history]
+    messages.append({'role': 'user', 'content': prompt}) # Füge den aktuellen Prompt als letzte Benutzernachricht hinzu
+
+    payload = {'model': openai_model, 'messages': messages}
     response = requests.post(openai_url, headers=headers, json=payload)
 
     if response.status_code == 200:
